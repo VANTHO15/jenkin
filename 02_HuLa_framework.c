@@ -1,5 +1,7 @@
 def dir_tool = "F:/Jenkin/00Source/FW_FULL/tool"
-def dir_tool_output = "F:/Jenkin/00Source/FW_FULL/output/${module}"
+def dir_tool_Zip = "F:/Jenkin/00Source/FW_FULL"
+
+ 
 
 pipeline {
     agent any
@@ -22,7 +24,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage("Generate Plugin") {
             steps {
                 dir("$dir_tool") {
@@ -52,15 +54,18 @@ pipeline {
                 }
             }
         }
-        stage("Export Report") {
+        stage("Export Report Output") {
             steps {
-                dir("dir_tool_output") {
+                dir("$dir_tool_Zip") {
                     script {
-                       bat "${Zip_file} a ${dir_tool}/../output/${module}/${test_name}/${compiler}.zip ${dir_tool}/../output/${module}/${test_name}/${compiler}/*" 
-                       archiveArtifacts artifacts: "${test_name}/${compiler}.zip", fingerprint: true
+                       bat "${Zip_file} a ${dir_tool}/../output/${module}.zip ${dir_tool}/../output/${module}/*" 
+                       archiveArtifacts artifacts: "output/${module}.zip", fingerprint: true
                     }
                 }
             }
         }
     }
 }
+
+có menu ngữ cảnh
+Soạn thảo
