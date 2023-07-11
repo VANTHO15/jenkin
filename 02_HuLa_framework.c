@@ -8,6 +8,9 @@ pipeline {
                 script {
                     def user_config = readFile(file: "${dir_tool}/UserConfig_Template.py")
                     user_config = user_config.replace("MODULE_REPLACE","${module}")
+                    user_config = user_config.replace("TEST_NAME_REPLACE","${test_name}")
+                    user_config = user_config.replace("COMPILER_REPLACE","${compiler}")
+                    user_config = user_config.replace("DEBUGER_REPLACE","${debuger}")
                     println(user_config)
                     writeFile(file: "${dir_tool}/UserConfig.py", text: user_config)
                     println("DONE REPLACE")
