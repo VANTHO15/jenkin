@@ -26,7 +26,13 @@ pipeline {
                 script {
                     bat "${Zip_file} a ${dir_tool}/Output/${module}_HuLa.zip ${dir_tool}/Output/${module}_HuLa/*" 
                 }
-                archiveArtifacts artifacts: "Output/${module}_HuLa.zip", fingerprint: true
+            }
+        }
+        stage("Sent Zip to Jenkin") {
+            steps {
+                dir("$dir_tool"){
+                    archiveArtifacts artifacts: "Output/${module}_HuLa.zip", fingerprint: true
+                }
             }
         }
     }
