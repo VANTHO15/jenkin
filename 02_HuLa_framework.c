@@ -1,4 +1,5 @@
 def dir_tool = "F:/Jenkin/00Source/FW_FULL/tool"
+def dir_tool_output = "F:/Jenkin/00Source/FW_FULL/output/${module}"
 
 pipeline {
     agent any
@@ -11,7 +12,6 @@ pipeline {
                     user_config = user_config.replace("TEST_NAME_REPLACE","${test_name}")
                     user_config = user_config.replace("COMPILER_REPLACE","${compiler}")
                     user_config = user_config.replace("DEBUGER_REPLACE","${debuger}")
-                    println(user_config)
                     writeFile(file: "${dir_tool}/UserConfig.py", text: user_config)
                     println("DONE REPLACE")
                 }
@@ -42,24 +42,25 @@ pipeline {
                 }
             }
         }
-        stage("Run Code") {
+        stage("Run Code and Report") {
             steps {
                 dir("$dir_tool") {
                     script {
                        bat "python main.py -o nodebug"
+                       bat "python main.py -o report"
                     }
                 }
             }
         }
         stage("Export Report") {
             steps {
-                dir("$dir_tool") {
+                dir("dir_tool_output") {
                     script {
-                       bat "python main.py -o report"
+                       bat "${Zip_file} a ${dir_tool}/../output/${module}/${test_name}/${compiler}.zip ${dir_tool}/../output/${module}/${test_name}/${compiler}/*" 
+                       archiveArtifacts artifacts: "${test_name}/${compiler}.zip", fingerprint: true
                     }
                 }
             }
         }
-        
     }
 }
